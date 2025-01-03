@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Harry Potter Movies</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+        input {
+            margin-right: 10px;
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Harry Potter Movies</h1>
+
+    <div>
+        <label for="filter-title">Filter by Title:</label>
+        <input type="text" id="filter-title" placeholder="Enter title...">
+
+        <label for="filter-year">Filter by Year:</label>
+        <input type="number" id="filter-year" placeholder="Enter year...">
+
+        <label for="filter-rating">Filter by Rating:</label>
+        <input type="number" id="filter-rating" min="1" max="5" placeholder="Enter rating...">
+
+        <button id="filter-button">Apply Filters</button>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Year</th>
+                <th>Poster</th>
+                <th>Rating</th>
+            </tr>
+        </thead>
+        <tbody id="movies-table">
+            <!-- Rows will be dynamically added here -->
+        </tbody>
+    </table>
+
+    <script>
+        // Fetch movies from the backend
+        async function fetchMovies(filters = {}) {
+            const query = new URLSearchParams(filters).toString();
+            const response = await fetch(`/movies?${query}`);
+            const movies = await response.json();
+            return movies;
+        }
+
+        // Render movies into the table
+        function renderMovies(movies) {
+            const tableBody = document.getElementById('movies-table');
+            tableBody.innerHTML = ''; // Clear previous rows
+
+            movies.forEach(movie => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${movie.id}</td>
+                    <td>${movie.title}</td>
+                    <td>${movie.year}</td>
+                    <td><img src="${movie.poster}" alt="Poster" width="50"></td>
+                    <td>${movie.rating}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        // Handle filter button click
+        document.getElementById('filter-button').addEventListener('click', async () => {
+            const title = document.getElementById('filter-title').value;
+            const year = document.getElementById('filter-year').value;
+            const rating = document.getElementById('filter-rating').value;
+
+            const filters = {};
+            if (title) filters.title = title;
+            if (year) filters.year = year;
+            if (rating) filters.rating = rating;
+
+            const movies = await fetchMovies(filters);
+            renderMovies(movies);
+        });
+
+        // Initial fetch of all movies
+        fetchMovies().then(renderMovies);
+    </script>
+</body>
+</html>
