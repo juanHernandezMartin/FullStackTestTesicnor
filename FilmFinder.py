@@ -1,4 +1,7 @@
 from flask import Flask, jsonify, request, render_template
+import webbrowser
+from threading import Timer
+
 import sqlite3
 import requests
 
@@ -102,5 +105,19 @@ def index():
 
     return render_template('index.html', movies=rows)
 
+
+def open_browser():
+    """Abre el navegador predeterminado en la URL de la aplicación."""
+    webbrowser.open_new('http://127.0.0.1:5000/')
+
 if __name__ == '__main__':
-    app.run(debug=True)
+    # Inicializar la base de datos
+    with app.app_context():
+        init_db()
+        fetch_movies()
+
+    # Abrir el navegador después de un breve retraso
+    Timer(1, open_browser).start()
+
+    # Iniciar la aplicación Flask
+    app.run(debug=False)

@@ -20,15 +20,5 @@ Para ejecutar este proyecto, asegúrate de tener instalado:
         pip install flask requests
 
 2. **Inicializar la base de datos**  
-    Ejecuta el archivo "FilmFinder.py" para iniciar el servidor Flask:  
-
-    Luego, accede a la siguiente URL en tu navegador o utiliza 'curl' para inicializar la base de datos: 
-        http://127.0.0.1:5000/init_db
-
-3. **Obtener películas de Harry Potter**  
-    Accede a la siguiente URL para poblar la base de datos con información de la API de OMDb: 
-        http://127.0.0.1:5000/fetch_movies
-
-4. **Abrir la aplicación web**  
-    En tu navegador, abre la URL principal: 
-        http://127.0.0.1:5000/
+    Ejecuta el archivo "FilmFinder.py" para iniciar la aplicacion:
+        python FilmFinder.py
